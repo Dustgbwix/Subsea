@@ -53,6 +53,7 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 Assets/Scripting/
  PlayerMovement.cs
  SceneReseter.cs
+ WaterScript.cs
 Assets/TutorialInfo/Scripts/Readme.cs
 Temp/obj/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
