@@ -50,9 +50,10 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 /warnaserror+:NU1605
 
 [sourceFiles]
-Assets/
- Scripting/PlayerMovement.cs
- TutorialInfo/Scripts/Readme.cs
+Assets/Scripting/
+ PlayerMovement.cs
+ SceneReseter.cs
+Assets/TutorialInfo/Scripts/Readme.cs
 Temp/obj/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
 [metadataReferences]
