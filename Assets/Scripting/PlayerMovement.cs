@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;  
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -7,23 +8,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float Swim = 5f;
     [SerializeField] private float jump = 5f;
+    [SerializeField] private float HighScore = 0f;
+    [SerializeField] private float Score = 0f;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Debug.Log("High Score is: " + HighScore);
+        HighScore = PlayerPrefs.GetFloat("HighScore", 0f);
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         if (inWater == true)
         {
             if (Input.GetKey(KeyCode.Space))
             {
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, Swim, rb.linearVelocity.z);
             }
-            else
-            {
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-            }
-            if (Input.GetKey(KeyCode.LeftControl))
+            else if (Input.GetKey(KeyCode.LeftControl))
             {
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, -Swim, rb.linearVelocity.z);
             }
@@ -64,6 +69,24 @@ public class PlayerMovement : MonoBehaviour
         float Z = Input.GetAxis("Vertical");
         Vector3 movement = new Vector3(X, 0f, Z);
         rb.linearVelocity = new Vector3(movement.x * moveSpeed, rb.linearVelocity.y, movement.z * moveSpeed);
+    }
+    private void OnCollisionEnter(Collision others)
+    {
+        if (others.gameObject.CompareTag("saver"))
+        {
+            if (Score > HighScore)
+            {
+                HighScore = Score;
+                PlayerPrefs.SetFloat("HighScore", Score);
+                PlayerPrefs.Save();
+            }
+        }
+        if (others.gameObject.CompareTag("collector"))
+        {
+            Debug.Log("Score is: " + Score);
+            Score += 1f;
+            Destroy(others.gameObject);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - water
   - enemy
+  - door
+  - saver
+  - collector
   layers:
   - Default
   - TransparentFX
