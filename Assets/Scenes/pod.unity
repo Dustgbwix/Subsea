@@ -1405,10 +1405,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fbbe75c997c1b46a26cdc8ce0a262a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  rb: {fileID: 2139693043}
+  cameraTransform: {fileID: 595408402}
   inWater: 0
   moveSpeed: 5
   Swim: 5
   jump: 5
+  HighScore: 0
+  Score: 0
+  MouseSensitivity: 100
 --- !u!136 &2139693045
 CapsuleCollider:
   m_ObjectHideFlags: 0

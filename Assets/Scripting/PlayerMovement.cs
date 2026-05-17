@@ -3,21 +3,29 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private Transform cameraTransform;
     [SerializeField] private bool inWater = false;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float Swim = 5f;
     [SerializeField] private float jump = 5f;
     [SerializeField] private float HighScore = 0f;
     [SerializeField] private float Score = 0f;
+    [SerializeField] private float MouseSensitivity = 100f;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         Debug.Log("High Score is: " + HighScore);
         HighScore = PlayerPrefs.GetFloat("HighScore", 0f);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Cursor.visible = true;
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -65,13 +73,22 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             }
         }
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
         float X = Input.GetAxis("Horizontal");
         float Z = Input.GetAxis("Vertical");
         Vector3 movement = new Vector3(X, 0f, Z);
+        transform.Rotate(0f, mouseX * MouseSensitivity * Time.deltaTime, 0f);
+        cameraTransform.Rotate(-mouseY * MouseSensitivity * Time.deltaTime, 0f, 0f);
         rb.linearVelocity = new Vector3(movement.x * moveSpeed, rb.linearVelocity.y, movement.z * moveSpeed);
     }
     private void OnCollisionEnter(Collision others)
     {
+        if (others.gameObject.CompareTag("enemy"))
+        {
+            Time.timeScale = 0f;
+            Debug.Log("you died! Final Score was: " + Score);
+        }
         if (others.gameObject.CompareTag("saver"))
         {
             if (Score > HighScore)
