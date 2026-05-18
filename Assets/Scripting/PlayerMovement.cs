@@ -11,12 +11,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jump = 5f;
     [SerializeField] private float HighScore = 0f;
     [SerializeField] private float Score = 0f;
+    float xRotation = 0f;
     [SerializeField] private float MouseSensitivity = 100f;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        float HighScore = PlayerPrefs.GetFloat("HighScore", 0f);
         Debug.Log("High Score is: " + HighScore);
-        HighScore = PlayerPrefs.GetFloat("HighScore", 0f);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -73,13 +74,16 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             }
         }
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * MouseSensitivity * Time.deltaTime;
         float X = Input.GetAxis("Horizontal");
         float Z = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(X, 0f, Z);
+        Vector3 movement = transform.right * X + transform.forward * Z;
         transform.Rotate(0f, mouseX * MouseSensitivity * Time.deltaTime, 0f);
-        cameraTransform.Rotate(-mouseY * MouseSensitivity * Time.deltaTime, 0f, 0f);
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -80f, 80f);
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         rb.linearVelocity = new Vector3(movement.x * moveSpeed, rb.linearVelocity.y, movement.z * moveSpeed);
     }
     private void OnCollisionEnter(Collision others)

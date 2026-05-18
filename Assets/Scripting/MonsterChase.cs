@@ -12,6 +12,7 @@ public class MonsterChase : MonoBehaviour
     void Update()
     {
         transform.LookAt(player);
+        transform.Rotate(0f, 90f, 0f);
         transform.position = Vector3.MoveTowards(transform.position, player.position, MonsterSpeed * Time.deltaTime);
     }
     private void OnTriggerEnter(Collider other)
